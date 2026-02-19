@@ -4,84 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T.P.S. English Academy | Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* General Styling */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
-        /* Login Page Styling */
-        #login-page { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
-        .school-name { color: #2c3e50; margin-bottom: 5px; font-size: 22px; font-weight: bold; }
-        .sub-text { color: #7f8c8d; font-size: 14px; margin-bottom: 25px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; }
-        button:hover { background: #2980b9; }
-        .error { color: #e74c3c; font-size: 13px; margin-top: 10px; display: none; }
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --accent: #f72585;
+            --bg: #f8f9fd;
+        }
 
-        /* Result Card Styling */
-        #result-page { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); width: 90%; max-width: 500px; display: none; position: relative; }
-        .result-header { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        .student-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 15px; }
-        
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th, td { border: 1px solid #edf2f7; padding: 12px; text-align: left; }
-        th { background: #f8fafc; color: #64748b; }
-        
-        .final-score { background: #f0fff4; padding: 15px; border-radius: 10px; border: 1px solid #c6f6d5; display: flex; justify-content: space-between; align-items: center; }
-        .percentage-badge { background: #27ae60; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
-        .back-btn { background: #95a5a6; margin-top: 15px; }
-        
-        @media print { .back-btn { display: none; } }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- Login Card --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .school-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 30px;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        h2 { color: #2d3436; margin: 10px 0; font-weight: 700; }
+        .sub-header { color: #636e72; font-size: 14px; margin-bottom: 30px; }
+
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 15px; color: #a4b0be; }
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border: 2px solid #f1f2f6;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 10px rgba(67,97,238,0.1); }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(67,97,238,0.4); }
+
+        /* --- Marksheet Section --- */
+        #result-page {
+            background: #fff;
+            width: 95%;
+            max-width: 600px;
+            border-radius: 20px;
+            overflow: hidden;
+            display: none;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .marksheet-header {
+            background: linear-gradient(to right, #2c3e50, #4b6cb7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .student-box {
+            display: flex;
+            justify-content: space-around;
+            background: #f8f9fa;
+            padding: 20px;
+            font-size: 14px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .table-container { padding: 25px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 12px; color: #636e72; border-bottom: 2px solid #eee; }
+        td { padding: 15px 12px; border-bottom: 1px solid #f1f1f1; font-weight: 500; }
+
+        .grade-pill {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .footer-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 20px 25px;
+            background: #fdfdfd;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+        .stat-card span { display: block; font-size: 12px; color: #b2bec3; }
+        .stat-card strong { font-size: 20px; color: var(--primary); }
+
+        .actions { padding: 20px; display: flex; gap: 10px; }
+        .btn-print { flex: 1; background: #2d3436; color: white; padding: 12px; border-radius: 8px; border: none; cursor: pointer; }
+        .btn-back { background: #dfe6e9; color: #2d3436; padding: 12px; border-radius: 8px; border: none; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        @media print {
+            .actions, .btn-back { display: none; }
+            body { background: white; }
+            #result-page { box-shadow: none; border: 1px solid #eee; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="login-page">
-        <div class="school-name">T.P.S. English Academy</div>
-        <div class="sub-text">Chohtan - 2nd Test Record</div>
+    <div id="login-page" class="glass-card">
+        <div class="school-logo"><i class="fas fa-graduation-cap"></i></div>
+        <h2>T.P.S. English Academy</h2>
+        <p class="sub-header">Chohtan • 2nd Test Portal</p>
         
-        <input type="text" id="studentName" placeholder="Student Name (e.g. Anushka)">
-        <input type="number" id="rollNo" placeholder="Roll Number (S.R. No.)">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="studentName" placeholder="Full Name (e.g. Gunjan)">
+        </div>
         
-        <button onclick="viewResult()">View Result</button>
-        <p id="error-msg" class="error">Records not found. Please check Name/Roll No.</p>
+        <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="number" id="rollNo" placeholder="Roll Number (S.R. No.)">
+        </div>
+        
+        <button class="btn-login" onclick="viewResult()">Show My Result</button>
+        <p id="error-msg" style="color: #ff7675; display:none; margin-top:15px; font-size: 13px;">Record not found. Please try again.</p>
     </div>
 
     <div id="result-page">
-        <div class="result-header">
-            <h2 style="margin:0; color:#2c3e50;">Marksheet</h2>
-            <small>Session 2025-26 | Class IX</small>
+        <div class="marksheet-header">
+            <h1 style="margin:0; font-size: 24px;">T.P.S. English Academy</h1>
+            <p style="opacity: 0.8; margin: 5px 0;">Class IX • Second Test Record • 2025-26</p>
         </div>
 
-        <div class="student-meta">
-            <div><strong>Name:</strong> <span id="resName"></span></div>
-            <div><strong>Roll No:</strong> <span id="resRoll"></span></div>
-            <div><strong>Rank:</strong> <span id="resRank"></span></div>
-            <div><strong>School:</strong> T.P.S. Chohtan</div>
+        <div class="student-box">
+            <div><strong>STUDENT NAME:</strong> <br> <span id="resName" style="color:var(--primary); font-weight:700"></span></div>
+            <div><strong>ROLL NO:</strong> <br> <span id="resRoll"></span></div>
+            <div><strong>RANK:</strong> <br> <span id="resRank" style="color:var(--accent); font-weight:700"></span></div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Subject</th>
-                    <th>Obtained</th>
-                    <th>Max</th>
-                </tr>
-            </thead>
-            <tbody id="markSheet"></tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SUBJECT</th>
+                        <th>MAX</th>
+                        <th>OBTAINED</th>
+                    </tr>
+                </thead>
+                <tbody id="markSheet"></tbody>
+            </table>
+        </div>
 
-        <div class="final-score">
-            <div>
-                <strong>Total: </strong> <span id="resTotal"></span> / 60
+        <div class="footer-summary">
+            <div class="stat-card">
+                <span>TOTAL MARKS</span>
+                <strong id="resTotal"></strong>
             </div>
-            <div class="percentage-badge" id="resPercent"></div>
+            <div class="stat-card">
+                <span>PERCENTAGE</span>
+                <strong id="resPercent"></strong>
+            </div>
         </div>
 
-        <button class="back-btn" onclick="location.reload()">Check Another Result</button>
+        <div class="actions">
+            <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print Result</button>
+            <button class="btn-back" onclick="location.reload()">Logout</button>
+        </div>
     </div>
 
     <script>
-        // Data exactly as seen in your image
         const students = [
             {sr: 1, name: "Anushka", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
             {sr: 2, name: "Avika", hin: 6, eng: 9, mat: 10, sci: 9, sst: 8, skt: 6, total: 48, rank: "N/A"},
@@ -91,38 +226,36 @@
             {sr: 6, name: "Karanveer", hin: 9, eng: 8, mat: 10, sci: 9, sst: 10, skt: 8, total: 54, rank: "N/A"},
             {sr: 7, name: "Kartik", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
             {sr: 8, name: "Krish", hin: 10, eng: 8, mat: 10, sci: 10, sst: 10, skt: 8, total: 54, rank: "N/A"},
-            {sr: 9, name: "Manish", hin: 8, eng: 7, mat: 10, sci: 10, sst: 8, skt: 8, total: 51, rank: "N/A"},
+            {sr: 9, name: "manish", hin: 8, eng: 7, mat: 10, sci: 10, sst: 8, skt: 8, total: 51, rank: "N/A"},
             {sr: 10, name: "Rashmi", hin: 10, eng: 10, mat: 10, sci: 10, sst: 10, skt: 10, total: 60, rank: "I"}
         ];
 
         function viewResult() {
-            const nameInput = document.getElementById('studentName').value.trim().toLowerCase();
-            const rollInput = parseInt(document.getElementById('rollNo').value);
-            const errorMsg = document.getElementById('error-msg');
+            const name = document.getElementById('studentName').value.trim().toLowerCase();
+            const roll = parseInt(document.getElementById('rollNo').value);
+            const found = students.find(s => s.name.toLowerCase() === name && s.sr === roll);
 
-            const student = students.find(s => s.name.toLowerCase() === nameInput && s.sr === rollInput);
-
-            if (student) {
+            if (found) {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('result-page').style.display = 'block';
 
-                document.getElementById('resName').innerText = student.name;
-                document.getElementById('resRoll').innerText = student.sr;
-                document.getElementById('resRank').innerText = student.rank;
-                document.getElementById('resTotal').innerText = student.total;
-                document.getElementById('resPercent').innerText = ((student.total/60)*100).toFixed(1) + "%";
+                document.getElementById('resName').innerText = found.name.toUpperCase();
+                document.getElementById('resRoll').innerText = found.sr;
+                document.getElementById('resRank').innerText = found.rank;
+                document.getElementById('resTotal').innerText = found.total + " / 60";
+                document.getElementById('resPercent').innerText = ((found.total/60)*100).toFixed(1) + "%";
 
                 const rows = `
-                    <tr><td>Hindi</td><td>${student.hin}</td><td>10</td></tr>
-                    <tr><td>English</td><td>${student.eng}</td><td>10</td></tr>
-                    <tr><td>Mathematics</td><td>${student.mat}</td><td>10</td></tr>
-                    <tr><td>Science</td><td>${student.sci}</td><td>10</td></tr>
-                    <tr><td>Social Studies</td><td>${student.sst}</td><td>10</td></tr>
-                    <tr><td>Sanskrit</td><td>${student.skt}</td><td>10</td></tr>
+                    <tr><td><i class="fas fa-book-open"></i> Hindi</td><td>10</td><td>${found.hin} <span class="grade-pill">Pass</span></td></tr>
+                    <tr><td><i class="fas fa-pen-nib"></i> English</td><td>10</td><td>${found.eng} <span class="grade-pill">Pass</span></td></tr>
+                    <tr><td><i class="fas fa-calculator"></i> Mathematics</td><td>10</td><td>${found.mat} <span class="grade-pill">Pass</span></td></tr>
+                    <tr><td><i class="fas fa-microscope"></i> Science</td><td>10</td><td>${found.sci} <span class="grade-pill">Pass</span></td></tr>
+                    <tr><td><i class="fas fa-globe"></i> SST</td><td>10</td><td>${found.sst} <span class="grade-pill">Pass</span></td></tr>
+                    <tr><td><i class="fas fa-language"></i> Sanskrit</td><td>10</td><td>${found.skt} <span class="grade-pill">Pass</span></td></tr>
                 `;
                 document.getElementById('markSheet').innerHTML = rows;
             } else {
-                errorMsg.style.display = 'block';
+                document.getElementById('error-msg').style.display = 'block';
             }
         }
     </script>
