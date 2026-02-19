@@ -3,101 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Result Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>T.P.S. English Academy | Student Portal</title>
+    <style>
+        /* General Styling */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        /* Login Page Styling */
+        #login-page { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        .school-name { color: #2c3e50; margin-bottom: 5px; font-size: 22px; font-weight: bold; }
+        .sub-text { color: #7f8c8d; font-size: 14px; margin-bottom: 25px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; transition: background 0.3s; }
+        button:hover { background: #2980b9; }
+        .error { color: #e74c3c; font-size: 13px; margin-top: 10px; display: none; }
+
+        /* Result Card Styling */
+        #result-page { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); width: 90%; max-width: 500px; display: none; position: relative; }
+        .result-header { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        .student-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 15px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #edf2f7; padding: 12px; text-align: left; }
+        th { background: #f8fafc; color: #64748b; }
+        
+        .final-score { background: #f0fff4; padding: 15px; border-radius: 10px; border: 1px solid #c6f6d5; display: flex; justify-content: space-between; align-items: center; }
+        .percentage-badge { background: #27ae60; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
+        .back-btn { background: #95a5a6; margin-top: 15px; }
+        
+        @media print { .back-btn { display: none; } }
+    </style>
 </head>
 <body>
 
-    <div id="login-page" class="login-container">
-        <div class="login-box">
-            <h2>T.P.S. English Academy</h2>
-            <p>Enter details to view your 2nd Test result</p>
-            
-            <input type="text" id="studentName" placeholder="Enter Student Name">
-            <input type="number" id="rollNo" placeholder="Enter Roll No (S.R.)">
-            
-            <button onclick="portalLogin()">View Result</button>
-            <p id="error-msg" class="error">Invalid Name or Roll Number!</p>
-        </div>
+    <div id="login-page">
+        <div class="school-name">T.P.S. English Academy</div>
+        <div class="sub-text">Chohtan - 2nd Test Record</div>
+        
+        <input type="text" id="studentName" placeholder="Student Name (e.g. Anushka)">
+        <input type="number" id="rollNo" placeholder="Roll Number (S.R. No.)">
+        
+        <button onclick="viewResult()">View Result</button>
+        <p id="error-msg" class="error">Records not found. Please check Name/Roll No.</p>
     </div>
 
-    <div id="result-page" class="container" style="display: none;">
-        <div class="result-card">
-            <div class="result-header">
-                <h3>Official Result Card</h3>
-                <button class="logout-btn" onclick="location.reload()">Back</button>
-            </div>
-            <hr>
-            <div class="student-info">
-                <p><strong>Name:</strong> <span id="resName"></span></p>
-                <p><strong>Roll No:</strong> <span id="resRoll"></span></p>
-                <p><strong>Class:</strong> IX</p>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Marks (Max: 10)</th>
-                    </tr>
-                </thead>
-                <tbody id="markSheet">
-                    </tbody>
-            </table>
-
-            <div class="summary">
-                <p><strong>Total Marks:</strong> <span id="resTotal"></span> / 60</p>
-                <p><strong>Percentage:</strong> <span id="resPercent"></span></p>
-                <p><strong>Rank:</strong> <span id="resRank"></span></p>
-            </div>
+    <div id="result-page">
+        <div class="result-header">
+            <h2 style="margin:0; color:#2c3e50;">Marksheet</h2>
+            <small>Session 2025-26 | Class IX</small>
         </div>
+
+        <div class="student-meta">
+            <div><strong>Name:</strong> <span id="resName"></span></div>
+            <div><strong>Roll No:</strong> <span id="resRoll"></span></div>
+            <div><strong>Rank:</strong> <span id="resRank"></span></div>
+            <div><strong>School:</strong> T.P.S. Chohtan</div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Obtained</th>
+                    <th>Max</th>
+                </tr>
+            </thead>
+            <tbody id="markSheet"></tbody>
+        </table>
+
+        <div class="final-score">
+            <div>
+                <strong>Total: </strong> <span id="resTotal"></span> / 60
+            </div>
+            <div class="percentage-badge" id="resPercent"></div>
+        </div>
+
+        <button class="back-btn" onclick="location.reload()">Check Another Result</button>
     </div>
 
     <script>
-        // Data from your uploaded image
+        // Data exactly as seen in your image
         const students = [
             {sr: 1, name: "Anushka", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
-            {sr: 2, name: "Avika", hin: 6, eng: 9, mat: 10, sci: 9, sst: 8, skt: 6, total: 48, rank: "-"},
+            {sr: 2, name: "Avika", hin: 6, eng: 9, mat: 10, sci: 9, sst: 8, skt: 6, total: 48, rank: "N/A"},
             {sr: 3, name: "Dhruv", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 10, total: 59, rank: "II"},
             {sr: 4, name: "Gunjan", hin: 10, eng: 10, mat: 10, sci: 10, sst: 10, skt: 10, total: 60, rank: "I"},
-            {sr: 5, name: "Kapil", hin: 7, eng: 5, mat: 10, sci: 9, sst: 8, skt: 7, total: 46, rank: "-"},
-            {sr: 6, name: "Karanveer", hin: 9, eng: 8, mat: 10, sci: 9, sst: 10, skt: 8, total: 54, rank: "-"},
+            {sr: 5, name: "Kapil", hin: 7, eng: 5, mat: 10, sci: 9, sst: 8, skt: 7, total: 46, rank: "N/A"},
+            {sr: 6, name: "Karanveer", hin: 9, eng: 8, mat: 10, sci: 9, sst: 10, skt: 8, total: 54, rank: "N/A"},
             {sr: 7, name: "Kartik", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
-            {sr: 8, name: "Krish", hin: 10, eng: 8, mat: 10, sci: 10, sst: 10, skt: 8, total: 54, rank: "-"},
-            {sr: 9, name: "Manish", hin: 8, eng: 7, mat: 10, sci: 10, sst: 8, skt: 8, total: 51, rank: "-"},
+            {sr: 8, name: "Krish", hin: 10, eng: 8, mat: 10, sci: 10, sst: 10, skt: 8, total: 54, rank: "N/A"},
+            {sr: 9, name: "Manish", hin: 8, eng: 7, mat: 10, sci: 10, sst: 8, skt: 8, total: 51, rank: "N/A"},
             {sr: 10, name: "Rashmi", hin: 10, eng: 10, mat: 10, sci: 10, sst: 10, skt: 10, total: 60, rank: "I"}
         ];
 
-        function portalLogin() {
-            const inputName = document.getElementById('studentName').value.trim().toLowerCase();
-            const inputRoll = parseInt(document.getElementById('rollNo').value);
-            
-            // Search for the student
-            const student = students.find(s => s.name.toLowerCase() === inputName && s.sr === inputRoll);
+        function viewResult() {
+            const nameInput = document.getElementById('studentName').value.trim().toLowerCase();
+            const rollInput = parseInt(document.getElementById('rollNo').value);
+            const errorMsg = document.getElementById('error-msg');
+
+            const student = students.find(s => s.name.toLowerCase() === nameInput && s.sr === rollInput);
 
             if (student) {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('result-page').style.display = 'block';
-                
-                // Fill details
+
                 document.getElementById('resName').innerText = student.name;
                 document.getElementById('resRoll').innerText = student.sr;
-                document.getElementById('resTotal').innerText = student.total;
                 document.getElementById('resRank').innerText = student.rank;
+                document.getElementById('resTotal').innerText = student.total;
                 document.getElementById('resPercent').innerText = ((student.total/60)*100).toFixed(1) + "%";
 
-                // Fill Marksheet
-                const sheet = `
-                    <tr><td>Hindi</td><td>${student.hin}</td></tr>
-                    <tr><td>English</td><td>${student.eng}</td></tr>
-                    <tr><td>Maths</td><td>${student.mat}</td></tr>
-                    <tr><td>Science</td><td>${student.sci}</td></tr>
-                    <tr><td>S.S.T</td><td>${student.sst}</td></tr>
-                    <tr><td>Sanskrit</td><td>${student.skt}</td></tr>
+                const rows = `
+                    <tr><td>Hindi</td><td>${student.hin}</td><td>10</td></tr>
+                    <tr><td>English</td><td>${student.eng}</td><td>10</td></tr>
+                    <tr><td>Mathematics</td><td>${student.mat}</td><td>10</td></tr>
+                    <tr><td>Science</td><td>${student.sci}</td><td>10</td></tr>
+                    <tr><td>Social Studies</td><td>${student.sst}</td><td>10</td></tr>
+                    <tr><td>Sanskrit</td><td>${student.skt}</td><td>10</td></tr>
                 `;
-                document.getElementById('markSheet').innerHTML = sheet;
+                document.getElementById('markSheet').innerHTML = rows;
             } else {
-                document.getElementById('error-msg').style.display = 'block';
+                errorMsg.style.display = 'block';
             }
         }
     </script>
