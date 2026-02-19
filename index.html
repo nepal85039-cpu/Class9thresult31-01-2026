@@ -3,70 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Portal | T.P.S. English Academy</title>
+    <title>Student Result Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="login-page" class="login-container">
         <div class="login-box">
-            <img src="https://via.placeholder.com/80" alt="School Logo" class="logo">
-            <h2>Student Portal</h2>
-            <p>Please enter the <strong>School Name</strong> to view results</p>
-            <input type="text" id="schoolNameInput" placeholder="Enter School Name...">
-            <button onclick="checkLogin()">Login</button>
-            <p id="error-msg" style="color: red; display: none; margin-top: 10px;">Incorrect School Name. Please try again.</p>
+            <h2>T.P.S. English Academy</h2>
+            <p>Enter details to view your 2nd Test result</p>
+            
+            <input type="text" id="studentName" placeholder="Enter Student Name">
+            <input type="number" id="rollNo" placeholder="Enter Roll No (S.R.)">
+            
+            <button onclick="portalLogin()">View Result</button>
+            <p id="error-msg" class="error">Invalid Name or Roll Number!</p>
         </div>
     </div>
 
     <div id="result-page" class="container" style="display: none;">
-        <header>
-            <h2>T.P.S. English Academy, Chohtan</h2>
-            <p><strong>2nd Test Record - Class IX</strong> | Date: 27/09/25</p>
-            <button class="logout-btn" onclick="location.reload()">Logout</button>
-        </header>
-        
-        <div style="overflow-x:auto;">
+        <div class="result-card">
+            <div class="result-header">
+                <h3>Official Result Card</h3>
+                <button class="logout-btn" onclick="location.reload()">Back</button>
+            </div>
+            <hr>
+            <div class="student-info">
+                <p><strong>Name:</strong> <span id="resName"></span></p>
+                <p><strong>Roll No:</strong> <span id="resRoll"></span></p>
+                <p><strong>Class:</strong> IX</p>
+            </div>
+
             <table>
                 <thead>
                     <tr>
-                        <th>S.R.</th>
-                        <th>Name</th>
-                        <th>Hindi</th>
-                        <th>English</th>
-                        <th>Maths</th>
-                        <th>SCI</th>
-                        <th>SST</th>
-                        <th>SKT</th>
-                        <th>Total</th>
-                        <th>%</th>
-                        <th>Rank</th>
+                        <th>Subject</th>
+                        <th>Marks (Max: 10)</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <tr><td>1</td><td>Anushka</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>8</td><td>57</td><td>95%</td><td>III</td></tr>
-                    <tr><td>2</td><td>Avika</td><td>6</td><td>9</td><td>10</td><td>9</td><td>8</td><td>6</td><td>48</td><td>80%</td><td>-</td></tr>
-                    <tr><td>3</td><td>Dhruv</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>10</td><td>59</td><td>98.3%</td><td>II</td></tr>
-                    <tr class="topper"><td>4</td><td>Gunjan</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>60</td><td>100%</td><td>I</td></tr>
-                    <tr><td>5</td><td>Kapil</td><td>7</td><td>5</td><td>10</td><td>9</td><td>8</td><td>7</td><td>46</td><td>76.6%</td><td>-</td></tr>
-                    <tr><td>6</td><td>Karanveer</td><td>9</td><td>8</td><td>10</td><td>9</td><td>10</td><td>8</td><td>54</td><td>90%</td><td>-</td></tr>
-                    <tr><td>7</td><td>Kartik</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>8</td><td>57</td><td>95%</td><td>III</td></tr>
-                    <tr><td>8</td><td>Krish</td><td>10</td><td>8</td><td>10</td><td>10</td><td>10</td><td>8</td><td>54</td><td>90%</td><td>-</td></tr>
-                    <tr><td>9</td><td>Manish</td><td>8</td><td>7</td><td>10</td><td>10</td><td>8</td><td>8</td><td>51</td><td>85%</td><td>-</td></tr>
-                    <tr class="topper"><td>10</td><td>Rashmi</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>60</td><td>100%</td><td>I</td></tr>
-                </tbody>
+                <tbody id="markSheet">
+                    </tbody>
             </table>
+
+            <div class="summary">
+                <p><strong>Total Marks:</strong> <span id="resTotal"></span> / 60</p>
+                <p><strong>Percentage:</strong> <span id="resPercent"></span></p>
+                <p><strong>Rank:</strong> <span id="resRank"></span></p>
+            </div>
         </div>
     </div>
 
     <script>
-        function checkLogin() {
-            const input = document.getElementById('schoolNameInput').value.trim().toLowerCase();
-            const correctName = "tps english academy"; // SET YOUR PASSWORD/NAME HERE
+        // Data from your uploaded image
+        const students = [
+            {sr: 1, name: "Anushka", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
+            {sr: 2, name: "Avika", hin: 6, eng: 9, mat: 10, sci: 9, sst: 8, skt: 6, total: 48, rank: "-"},
+            {sr: 3, name: "Dhruv", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 10, total: 59, rank: "II"},
+            {sr: 4, name: "Gunjan", hin: 10, eng: 10, mat: 10, sci: 10, sst: 10, skt: 10, total: 60, rank: "I"},
+            {sr: 5, name: "Kapil", hin: 7, eng: 5, mat: 10, sci: 9, sst: 8, skt: 7, total: 46, rank: "-"},
+            {sr: 6, name: "Karanveer", hin: 9, eng: 8, mat: 10, sci: 9, sst: 10, skt: 8, total: 54, rank: "-"},
+            {sr: 7, name: "Kartik", hin: 10, eng: 9, mat: 10, sci: 10, sst: 10, skt: 8, total: 57, rank: "III"},
+            {sr: 8, name: "Krish", hin: 10, eng: 8, mat: 10, sci: 10, sst: 10, skt: 8, total: 54, rank: "-"},
+            {sr: 9, name: "Manish", hin: 8, eng: 7, mat: 10, sci: 10, sst: 8, skt: 8, total: 51, rank: "-"},
+            {sr: 10, name: "Rashmi", hin: 10, eng: 10, mat: 10, sci: 10, sst: 10, skt: 10, total: 60, rank: "I"}
+        ];
 
-            if (input === correctName) {
+        function portalLogin() {
+            const inputName = document.getElementById('studentName').value.trim().toLowerCase();
+            const inputRoll = parseInt(document.getElementById('rollNo').value);
+            
+            // Search for the student
+            const student = students.find(s => s.name.toLowerCase() === inputName && s.sr === inputRoll);
+
+            if (student) {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('result-page').style.display = 'block';
+                
+                // Fill details
+                document.getElementById('resName').innerText = student.name;
+                document.getElementById('resRoll').innerText = student.sr;
+                document.getElementById('resTotal').innerText = student.total;
+                document.getElementById('resRank').innerText = student.rank;
+                document.getElementById('resPercent').innerText = ((student.total/60)*100).toFixed(1) + "%";
+
+                // Fill Marksheet
+                const sheet = `
+                    <tr><td>Hindi</td><td>${student.hin}</td></tr>
+                    <tr><td>English</td><td>${student.eng}</td></tr>
+                    <tr><td>Maths</td><td>${student.mat}</td></tr>
+                    <tr><td>Science</td><td>${student.sci}</td></tr>
+                    <tr><td>S.S.T</td><td>${student.sst}</td></tr>
+                    <tr><td>Sanskrit</td><td>${student.skt}</td></tr>
+                `;
+                document.getElementById('markSheet').innerHTML = sheet;
             } else {
                 document.getElementById('error-msg').style.display = 'block';
             }
