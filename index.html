@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Portal | T.P.S. English Academy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <img src="https://via.placeholder.com/80" alt="School Logo" class="logo">
+            <h2>Student Portal</h2>
+            <p>Please enter the <strong>School Name</strong> to view results</p>
+            <input type="text" id="schoolNameInput" placeholder="Enter School Name...">
+            <button onclick="checkLogin()">Login</button>
+            <p id="error-msg" style="color: red; display: none; margin-top: 10px;">Incorrect School Name. Please try again.</p>
+        </div>
+    </div>
+
+    <div id="result-page" class="container" style="display: none;">
+        <header>
+            <h2>T.P.S. English Academy, Chohtan</h2>
+            <p><strong>2nd Test Record - Class IX</strong> | Date: 27/09/25</p>
+            <button class="logout-btn" onclick="location.reload()">Logout</button>
+        </header>
+        
+        <div style="overflow-x:auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S.R.</th>
+                        <th>Name</th>
+                        <th>Hindi</th>
+                        <th>English</th>
+                        <th>Maths</th>
+                        <th>SCI</th>
+                        <th>SST</th>
+                        <th>SKT</th>
+                        <th>Total</th>
+                        <th>%</th>
+                        <th>Rank</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td>1</td><td>Anushka</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>8</td><td>57</td><td>95%</td><td>III</td></tr>
+                    <tr><td>2</td><td>Avika</td><td>6</td><td>9</td><td>10</td><td>9</td><td>8</td><td>6</td><td>48</td><td>80%</td><td>-</td></tr>
+                    <tr><td>3</td><td>Dhruv</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>10</td><td>59</td><td>98.3%</td><td>II</td></tr>
+                    <tr class="topper"><td>4</td><td>Gunjan</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>60</td><td>100%</td><td>I</td></tr>
+                    <tr><td>5</td><td>Kapil</td><td>7</td><td>5</td><td>10</td><td>9</td><td>8</td><td>7</td><td>46</td><td>76.6%</td><td>-</td></tr>
+                    <tr><td>6</td><td>Karanveer</td><td>9</td><td>8</td><td>10</td><td>9</td><td>10</td><td>8</td><td>54</td><td>90%</td><td>-</td></tr>
+                    <tr><td>7</td><td>Kartik</td><td>10</td><td>9</td><td>10</td><td>10</td><td>10</td><td>8</td><td>57</td><td>95%</td><td>III</td></tr>
+                    <tr><td>8</td><td>Krish</td><td>10</td><td>8</td><td>10</td><td>10</td><td>10</td><td>8</td><td>54</td><td>90%</td><td>-</td></tr>
+                    <tr><td>9</td><td>Manish</td><td>8</td><td>7</td><td>10</td><td>10</td><td>8</td><td>8</td><td>51</td><td>85%</td><td>-</td></tr>
+                    <tr class="topper"><td>10</td><td>Rashmi</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>60</td><td>100%</td><td>I</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function checkLogin() {
+            const input = document.getElementById('schoolNameInput').value.trim().toLowerCase();
+            const correctName = "tps english academy"; // SET YOUR PASSWORD/NAME HERE
+
+            if (input === correctName) {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('result-page').style.display = 'block';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
